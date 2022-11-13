@@ -55,6 +55,19 @@ class AppCheckController extends Controller
                 $fsys = \Cache::getDirectory();
                 $result["Cache Directory"] = $fsys;
                 break;
+            case "redis":
+                try {
+                    $redis_key = 'test_key';
+                    $redis_value = 'hello-world';
+                    Cache::put($redis_key, $redis_value, $seconds = 60);
+                    $value = Cache::get($redis_key);
+                    $result["Redis Host"]=env("REDIS_HOST");
+                    $result["Redis OK"] = $value == $redis_value;
+                } catch (\Throwable $th) {
+
+                    $result["Redis NOT OK"] = $th->getMessage();
+                }
+
             default:
                 # code...
                 break;
@@ -81,11 +94,17 @@ class AppCheckController extends Controller
      */
     public function testLog()
     {
+        //test if log is writeable.
         $msg = [
-            "hello" => "wolrd",
+            "hello" => "world",
         ];
 
-        \Log::error("HELLO", ["WRO"]);
-        return response()->json(["hello" => "world"]);
+        try {
+            \Log::info("Testing", ["writeable log"]);
+            return response()->json(["result" => "OK"]);
+        } catch (\Throwable $th) {
+            return response()->json(["result" => $th->getMessage()]);
+        }
+
     }
 }

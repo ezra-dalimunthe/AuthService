@@ -21,6 +21,8 @@ $router->get('/', function () use ($router) {
     ]);
 });
 $router->get('/api/v1/env-check', "AppCheckController@Inspection");
+$router->get('/api/v1/log-check', "AppCheckController@testLog");
+
 Route::get('/api/docs', ['as' => 'docs', function () {
     $paths = [
         base_path() . '/app/Models',

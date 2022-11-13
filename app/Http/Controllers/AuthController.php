@@ -23,8 +23,13 @@ class AuthController extends Controller
      *      )
      *    ),
      *    @OA\Response(
-     *      response=201,
-     *      description="OK"
+     *      response=200,
+     *      description="OK",
+     *      @OA\JsonContent(
+     *       allOf={
+     *          @OA\Schema(ref="#/components/schemas/LoginSuccessResponse"),
+     *       },
+     *      )
      *    ),
      *    @OA\Response(response=401, description="Authorization failed",
      *       @OA\JsonContent(ref="#/components/schemas/ErrorResponse")
@@ -68,11 +73,11 @@ class AuthController extends Controller
      *      )
      *    ),
      *    @OA\Response(
-     *      response=201,
+     *      response=200,
      *      description="OK",
      *      @OA\JsonContent(
      *       allOf={
-     *          @OA\Schema(ref="#/components/schemas/SuccessResponse"),
+     *          @OA\Schema(ref="#/components/schemas/RegisterSuccessResponse"),
      *       },
      *      )
      *    ),
@@ -133,13 +138,20 @@ class AuthController extends Controller
      */
     public function refresh()
     {
+        if ($user = Auth::user()) {
+            return response()->json([
+                'user' => $user,
+                'authorisation' => [
+                    'token' => Auth::refresh(),
+                    'type' => 'bearer',
+                ],
+            ]);
+        }
         return response()->json([
-            'user' => Auth::user(),
-            'authorisation' => [
-                'token' => Auth::refresh(),
-                'type' => 'bearer',
-            ],
-        ]);
+            'status' => 'false',
+            'message' => 'User not logged in yet.',
+        ], 401);
+
     }
 
     /**

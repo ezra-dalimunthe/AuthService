@@ -99,6 +99,7 @@ $app->routeMiddleware([
 
 // $app->register(App\Providers\EventServiceProvider::class);
 $app->register(PHPOpenSourceSaver\JWTAuth\Providers\LumenServiceProvider::class);
+$app->register(Illuminate\Redis\RedisServiceProvider::class);
 
 /*
 |--------------------------------------------------------------------------
