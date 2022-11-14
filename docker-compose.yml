@@ -32,7 +32,7 @@ services:
 
       CACHE_DRIVER: redis
       QUEUE_CONNECTION: sync
-      REDIS_HOST: redis_service
+      REDIS_HOST: reading-point-auth-redis-service
       REDIS_PORT: 6379
       REDIS_DATABASE: 0
       REDIS_PASSWORD: halotec123
@@ -58,8 +58,7 @@ services:
     environment:
       MYSQL_DATABASE: reading_point_auth
       MYSQL_ROOT_PASSWORD: unpri2022
-      SERVICE_TAGS: v1
-      SERVICE_NAME: reading_point_db
+
     networks:
       - reading-point-auth-network
   redis_service:

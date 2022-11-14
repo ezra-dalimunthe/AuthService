@@ -5,6 +5,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 
 class AuthController extends Controller
 {
@@ -49,6 +50,8 @@ class AuthController extends Controller
         }
 
         $user = Auth::user();
+        $user->load("roles");
+        $user->roles->makeHidden("user_id");
         return response()->json([
             'user' => $user,
             'authorisation' => [
@@ -118,9 +121,14 @@ class AuthController extends Controller
      *   @OA\Response(response=200, description="OK"),
      * )
      */
-    public function logout()
+    public function logout(Request $request)
     {
-        Auth::logout();
+        $token = $request->bearerToken();
+        if ($token) {
+          
+            Auth::logout();
+        }
+
         return response()->json([
             'status' => 'success',
             'message' => 'Successfully logged out',
@@ -254,6 +262,8 @@ class AuthController extends Controller
     public function me(Request $request)
     {
         $currentUser = Auth::user();
+        $currentUser->load("roles");
+        $currentUser->roles->makeHidden("user_id");
         return response()->json($currentUser);
     }
 
@@ -293,6 +303,8 @@ class AuthController extends Controller
         $request->headers->set('Authorization', 'Bearer ' . $jwt);
         $currentUser = Auth::user();
         if ($currentUser) {
+            $currentUser->load("roles");
+            $currentUser->roles->makeHidden("user_id");
             return response()->json($currentUser, 200);
         }
         return response()->json(null, 403);

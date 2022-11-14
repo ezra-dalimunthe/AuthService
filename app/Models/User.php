@@ -2,13 +2,12 @@
 
 namespace App\Models;
 
-use Illuminate\Auth\Authenticatable;
 use App\Traits\Uuids;
+use Illuminate\Auth\Authenticatable;
 use Illuminate\Contracts\Auth\Authenticatable as IAuthenticatable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use PHPOpenSourceSaver\JWTAuth\Contracts\JWTSubject;
-
 
 /**
  * @OA\Schema(
@@ -29,7 +28,7 @@ class User extends Model implements JWTSubject, IAuthenticatable
      * @var string[]
      */
     protected $fillable = [
-        'display_name', 'email',
+        'display_name', 'email', 'role_code',
     ];
 
     /**
@@ -38,7 +37,7 @@ class User extends Model implements JWTSubject, IAuthenticatable
      * @var string[]
      */
     protected $hidden = [
-        'password','created_at','updated_at','deleted_at'
+        'password', 'created_at', 'updated_at', 'deleted_at',
     ];
 
     /**
@@ -59,5 +58,11 @@ class User extends Model implements JWTSubject, IAuthenticatable
     public function getJWTCustomClaims()
     {
         return [];
+    }
+
+    public function roles()
+    {
+        return $this->hasMany(\App\Models\UserRole::class, "user_id", "id");
+
     }
 }

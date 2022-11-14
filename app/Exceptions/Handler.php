@@ -53,6 +53,12 @@ class Handler extends ExceptionHandler
         if ($exception instanceof ValidationException) {
             return validationFailResponse($exception->errors());
         }
+        if ($exception instanceof HttpException) {
+            return response()->json([
+                'errorMessage' => $exception->getMessage(),
+
+            ], $exception->getStatusCode());
+        }
         return parent::render($request, $exception);
     }
 }

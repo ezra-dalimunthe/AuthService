@@ -8,8 +8,7 @@ $router->post("/api/v1/auth/register", [
 ]);
 
 $router->get("/api/v1/auth/logout", [
-    "middleware" => ["auth"],
-    "uses" => "AuthController@logout",
+     "uses" => "AuthController@logout",
 ]);
 
 $router->get("/api/v1/auth/refresh", [
