@@ -11,8 +11,6 @@ RUN apk add --no-cache pcre-dev $PHPIZE_DEPS \
 
 WORKDIR /var/www/html/
 
-# RUN chown -R www-data:www-data /var/www
-
 RUN php -r "readfile('http://getcomposer.org/installer');" | php -- --install-dir=/usr/bin/ --filename=composer
 
 
