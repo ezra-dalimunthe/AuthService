@@ -15,18 +15,25 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-       
+
         \DB::table("user_roles")->truncate();
         \DB::table("users")->delete();
-        //super admin
+        //super user
         $user = new User;
         $user->display_name = "Administrator";
         $user->email = "admin@example.com";
         $user->password = Hash::make("secret123");
-        $user->status_id=1;
+        $user->status_id = 1;
         $user->save();
         $user->roles()->create(["user_id" => $user->id,
             "role" => "administrator"]);
+        $user->roles()->create(["user_id" => $user->id,
+            "role" => "front_desk"]);
+        $user->roles()->create(["user_id" => $user->id,
+            "role" => "book_manager"]);
+
+        $user->roles()->create(["user_id" => $user->id,
+            "role" => "member_manager"]);
 
         //front-desk
         $user = new User;

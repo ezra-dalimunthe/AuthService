@@ -1,4 +1,5 @@
 <?php
+use Illuminate\Database\Connection;
 
 /** @var \Laravel\Lumen\Routing\Router $router */
 
@@ -41,3 +42,16 @@ Route::get('/api/docs', ['as' => 'docs', function () {
 foreach (glob(__DIR__ . "/endpoints/*.php") as $filename) {
     include $filename;
 }
+
+
+
+
+Route::get('/dbcheck', function () {
+    // Test database connection
+    try {
+        DB::connection()->getPdo();
+        echo "database " . DB::connection()->getDatabaseName(), " is ready\n" ;
+    } catch (\Exception $e) {
+        die("Could not connect to the database. Please check your configuration. error:" . $e );
+   }
+});
